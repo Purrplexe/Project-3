@@ -6,13 +6,13 @@ using UnityEngine;
 [Serializable]
 public class TestDataClass : DataClass
 {
-    public int testValue0;
-
-    [SerializeField]
-    private List<double> testValue1;
-
-    public List<double> v1
+    [Serializable]
+    public class Point
     {
-        get { return testValue1; }
+        public float x;
+        public float y;
     }
+
+    public List<Point> Points = new List<Point>();
 }
+
