@@ -42,15 +42,13 @@ while(True):
             for box in boxes:
                 #if box is a 2x6 (https://github.com/ultralytics/ultralytics/issues/2868)
                 class_label = result.names[int(box.cls[0])]
-                if class_label != "brick_2x4":
-                    continue
                 # extract box coordinates
                 x1, y1, x2, y2 = box.xyxy[0]
                 #get center point
                 cx = (x1 + x2) / 2
                 cy = (y1 + y2) / 2
                 #add point to data structure
-                data["Points"].append({ "x": float(cx), "y": float(cy) })
+                data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": bool(abs(x1-x2) > abs(y1-y2) )})
                 # send data to Unity
             connector.send("box_coordinates", data)
             data = { "Points": [] }

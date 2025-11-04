@@ -9,8 +9,10 @@ public class TestDataClass : DataClass
     [Serializable]
     public class Point
     {
+        public string brickType;
         public float x;
         public float y;
+        public bool isHorizontal;
     }
 
     public List<Point> Points = new List<Point>();
