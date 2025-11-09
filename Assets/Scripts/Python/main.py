@@ -48,9 +48,9 @@ while(True):
                 cx = (x1 + x2) / 2
                 cy = (y1 + y2) / 2
                 #add point to data structure
-                data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": bool(abs(x1-x2) > abs(y1-y2) )})
+                data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": bool((abs(x1-x2) < abs(y1-y2) ))})
                 # send data to Unity
             connector.send("box_coordinates", data)
             data = { "Points": [] }
-    time.sleep(10)
+    time.sleep(1)
             

@@ -64,6 +64,7 @@ public class ConnectionTest : MonoBehaviour
             GameObject obj = Instantiate(legoObj, rootObj.transform);
             // scale x and y
             obj.transform.localPosition = new Vector3((point.x / 640)*10, 0, (point.y / 480) * 10);
+            obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 90 : 0, 0);
         }
 
         /* List<float> v2 = new List<float>()
