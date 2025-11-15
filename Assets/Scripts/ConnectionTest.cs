@@ -62,9 +62,18 @@ public class ConnectionTest : MonoBehaviour
         {
             Debug.Log("x: " + point.x + " y: " + point.y);
             GameObject obj = Instantiate(legoObj, rootObj.transform);
-            // scale x and y
-            obj.transform.localPosition = new Vector3((point.x / 640)*10, 0, (point.y / 480) * 10);
+            // scale x and y (not anymore)
+            obj.transform.localPosition = new Vector3(point.x, 0,point.y);
             obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 90 : 0, 0);
+            //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
+            // set it to the % of space it takes up (along length)
+            var desiredlengthUnits = point.length;
+            var currentBoundsSize = obj.GetComponent<MeshRenderer>().bounds.size.x;
+            var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * obj.transform.lossyScale.x);
+            //apply transformation
+            obj.transform.localScale *= requiredTransformLocalScale;
+
+
         }
 
         /* List<float> v2 = new List<float>()

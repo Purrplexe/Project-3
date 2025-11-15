@@ -27,14 +27,14 @@ connector.start_listening(
 print("connected")
 video_capture = cv2.VideoCapture(0)
 #load our trained model
-model = YOLO(r"D:\Project 3\Project 3\yolov5\runs\detect\train\weights\best.pt")
+model = YOLO(r"C:\Users\piow3\Documents\GitHub\Project-3\Assets\Scripts\Python\best.pt")
 while(True):
     # Create data structure
     data = { "Points": [] }
     # Capture frame from the VideoCapture object:
     ret, frame = video_capture.read()
     if ret:
-        results = model(frame, conf = 0.7)
+        results = model(frame, conf = 0.7)  
         for result in results:
             boxes = result.boxes
             if len(boxes) == 0:
@@ -48,7 +48,9 @@ while(True):
                 cx = (x1 + x2) / 2
                 cy = (y1 + y2) / 2
                 #add point to data structure
-                data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": bool((abs(x1-x2) < abs(y1-y2) ))})
+                isHorizontal = bool((abs(x1-x2) < abs(y1-y2) ))
+                length = abs(x1-x2) if bool((abs(x1-x2) <  abs(y1-y2))) else abs(y1-y2)
+                data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": isHorizontal, "length": length})
                 # send data to Unity
             connector.send("box_coordinates", data)
             data = { "Points": [] }

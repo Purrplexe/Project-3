@@ -13,6 +13,7 @@ public class TestDataClass : DataClass
         public float x;
         public float y;
         public bool isHorizontal;
+        public float length;
     }
 
     public List<Point> Points = new List<Point>();
