@@ -8,6 +8,7 @@ using UnityEngine;
 public class ConnectionTest : MonoBehaviour
 {
 
+
     [Serializable]
     private class SendingData
     {
@@ -24,6 +25,7 @@ public class ConnectionTest : MonoBehaviour
     }
     public GameObject legoObj;
     public GameObject rootObj;
+    public float scaleFactor = 0.1f;
     void Start()
     {
         PythonConnector.instance.RegisterAction(typeof(TestDataClass), OnDataReceived);
@@ -63,11 +65,11 @@ public class ConnectionTest : MonoBehaviour
             Debug.Log("x: " + point.x + " y: " + point.y);
             GameObject obj = Instantiate(legoObj, rootObj.transform);
             // scale x and y (not anymore)
-            obj.transform.localPosition = new Vector3(point.x, 0,point.y);
+            obj.transform.localPosition = new Vector3(point.x / scaleFactor, 0,point.y / scaleFactor);
             obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 90 : 0, 0);
             //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
             // set it to the % of space it takes up (along length)
-            var desiredlengthUnits = point.length;
+            var desiredlengthUnits = point.length / scaleFactor;
             var currentBoundsSize = obj.GetComponent<MeshRenderer>().bounds.size.x;
             var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * obj.transform.lossyScale.x);
             //apply transformation
