@@ -72,7 +72,6 @@ public class ConnectionTest : MonoBehaviour
             //instantiate brick at root
             GameObject obj = Instantiate(labelToBrick[point.brickType], rootObj.transform);
             // scale x and y (not anymore)
-            obj.transform.localPosition = new Vector3(point.x / scaleFactor, 0,point.y / scaleFactor);
             obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 90 : 0, 0);
             //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
             // set it to the % of space it takes up (along length)
@@ -89,6 +88,8 @@ public class ConnectionTest : MonoBehaviour
             var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * (point.isHorizontal ? obj.transform.lossyScale.x : obj.transform.lossyScale.y));
             //apply transformation
             obj.transform.localScale *= requiredTransformLocalScale;
+            obj.transform.localPosition = new Vector3(point.x / scaleFactor, 0, point.y / scaleFactor);
+
 
 
         }

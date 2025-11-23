@@ -27,7 +27,7 @@ connector.start_listening(
 print("connected")
 video_capture = cv2.VideoCapture(0)
 #load our trained model
-model = YOLO(r"C:\Projects\Medialogi\Project-3\Assets\Scripts\Python\best.pt")
+model = YOLO(r"C:\Users\piow3\Documents\GitHub\Project-3\Assets\Scripts\Python\best.pt")
 while(True):
     # Create data structure
     data = { "Points": [] }
@@ -44,6 +44,15 @@ while(True):
                 class_label = result.names[int(box.cls[0])]
                 # extract box coordinates
                 x1, y1, x2, y2 = box.xyxy[0]
+                # Draw bounding box on frame
+                cv2.rectangle(frame, 
+                          (int(x1), int(y1)), 
+                          (int(x2), int(y2)), 
+                          (0, 255, 0), 2)
+                cv2.putText(frame, class_label, 
+                        (int(x1), int(y1) - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 
+                        0.7, (0, 255, 0), 2)
                 #get center point
                 cx = (x1 + x2) / 2
                 cy = (y1 + y2) / 2
@@ -54,5 +63,6 @@ while(True):
                 # send data to Unity
             connector.send("box_coordinates", data)
             data = { "Points": [] }
-    time.sleep(1)
+    cv2.imshow("Camera with Bounding Boxes", frame)
+    cv2.waitKey(1)
             
