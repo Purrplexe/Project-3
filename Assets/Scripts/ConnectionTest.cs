@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using PythonConnection;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,9 +24,11 @@ public class ConnectionTest : MonoBehaviour
         [SerializeField]
         private List<float> testValue1;
     }
-    public GameObject legoObj;
     public GameObject rootObj;
-    public float scaleFactor = 0.1f;
+    public string[] labels = { "brick_2x2", "brick_2x4", "brick_1x6", "plate_1x2", "plate_2x2", "plate_2x4"};
+    public GameObject[] legoBricks = { };
+    public Dictionary<string, GameObject> labelToBrick = new Dictionary<string, GameObject>();
+    public float scaleFactor = 100.0f;
     void Start()
     {
         PythonConnector.instance.RegisterAction(typeof(TestDataClass), OnDataReceived);
@@ -37,6 +40,10 @@ public class ConnectionTest : MonoBehaviour
         else
         {
             Debug.Log("Connection Failed");
+        }
+        for (int i = 0; i < labels.Length; i++)
+        {
+            labelToBrick[labels[i]] = legoBricks[i];
         }
     }
 
@@ -54,7 +61,6 @@ public class ConnectionTest : MonoBehaviour
     {
         Debug.Log("Stopped");
     }
-
     public void OnDataReceived(DataClass data)
     {
         TestDataClass testData = data as TestDataClass;
@@ -63,15 +69,24 @@ public class ConnectionTest : MonoBehaviour
         foreach (TestDataClass.Point point in testData.Points)
         {
             Debug.Log("x: " + point.x + " y: " + point.y);
-            GameObject obj = Instantiate(legoObj, rootObj.transform);
+            //instantiate brick at root
+            GameObject obj = Instantiate(labelToBrick[point.brickType], rootObj.transform);
             // scale x and y (not anymore)
             obj.transform.localPosition = new Vector3(point.x / scaleFactor, 0,point.y / scaleFactor);
             obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 90 : 0, 0);
             //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
             // set it to the % of space it takes up (along length)
             var desiredlengthUnits = point.length / scaleFactor;
-            var currentBoundsSize = obj.GetComponent<MeshRenderer>().bounds.size.x;
-            var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * obj.transform.lossyScale.x);
+            // https://discussions.unity.com/t/how-to-get-object-bounds-from-children/804233
+            MeshRenderer[] meshes = obj.GetComponentsInChildren<MeshRenderer>();
+            var bounds = new Bounds(obj.transform.position, Vector3.one);
+            foreach (MeshRenderer mesh in meshes)
+            {
+                bounds.Encapsulate(mesh.bounds);
+            }
+            //scale along length
+            float currentBoundsSize = point.isHorizontal ? bounds.size.x : bounds.size.y;
+            var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * (point.isHorizontal ? obj.transform.lossyScale.x : obj.transform.lossyScale.y));
             //apply transformation
             obj.transform.localScale *= requiredTransformLocalScale;
 
