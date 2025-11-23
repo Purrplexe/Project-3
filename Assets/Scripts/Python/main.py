@@ -34,7 +34,7 @@ while(True):
     # Capture frame from the VideoCapture object:
     ret, frame = video_capture.read()
     if ret:
-        results = model(frame, conf = 0.7)  
+        results = model(frame, conf = 0.4)  
         for result in results:
             boxes = result.boxes
             if len(boxes) == 0:
