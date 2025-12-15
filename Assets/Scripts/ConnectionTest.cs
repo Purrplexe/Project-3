@@ -68,12 +68,12 @@ public class ConnectionTest : MonoBehaviour
             Destroy(rootObj.transform.GetChild(i).gameObject);
         foreach (TestDataClass.Point point in testData.Points)
         {
-            Debug.Log("x: " + point.x + " y: " + point.y);
+            Debug.Log(point.brickType + ": x: " + point.x + " y: " + point.y + ", length: " + point.length + (point.isHorizontal ? "Horizonatal" : "Vertical"));
             //instantiate brick at root
             GameObject obj = Instantiate(labelToBrick[point.brickType], rootObj.transform);
             // scale x and y (not anymore)
-            obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 90 : 0, 0);
-            //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
+            obj.transform.localRotation = Quaternion.Euler(0, point.isHorizontal ? 0 : 90, 0);
+            
             // set it to the % of space it takes up (along length)
             var desiredlengthUnits = point.length / scaleFactor;
             // https://discussions.unity.com/t/how-to-get-object-bounds-from-children/804233
@@ -83,6 +83,7 @@ public class ConnectionTest : MonoBehaviour
             {
                 bounds.Encapsulate(mesh.bounds);
             }
+            //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
             //scale along length
             float currentBoundsSize = point.isHorizontal ? bounds.size.x : bounds.size.y;
             var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * (point.isHorizontal ? obj.transform.lossyScale.x : obj.transform.lossyScale.y));

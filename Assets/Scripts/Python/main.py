@@ -65,7 +65,7 @@ while(True):
                 cy = video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT) -cy
                 #add point to data structure
                 
-                isHorizontal = bool((abs(x1-x2) < abs(y1-y2) ))
+                isHorizontal = bool((abs(x1-x2) > abs(y1-y2) ))
                 length = abs(x1-x2) if bool((abs(x1-x2) <  abs(y1-y2))) else abs(y1-y2)
                 data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": bool(isHorizontal), "length": float(length)})
                 # send data to Unity
