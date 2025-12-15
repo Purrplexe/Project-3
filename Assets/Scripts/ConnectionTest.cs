@@ -85,7 +85,7 @@ public class ConnectionTest : MonoBehaviour
             }
             //scale bricksize https://discussions.unity.com/t/sizing-an-object-to-unity-units/942353
             //scale along length
-            float currentBoundsSize = point.isHorizontal ? bounds.size.x : bounds.size.y;
+            float currentBoundsSize = point.isHorizontal ? bounds.size.y : bounds.size.x;
             var requiredTransformLocalScale = desiredlengthUnits / (currentBoundsSize * (point.isHorizontal ? obj.transform.lossyScale.x : obj.transform.lossyScale.y));
             //apply transformation
             obj.transform.localScale *= requiredTransformLocalScale;

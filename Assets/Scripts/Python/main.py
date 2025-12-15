@@ -52,10 +52,7 @@ while(True):
                           (int(x1), int(y1)), 
                           (int(x2), int(y2)), 
                           (0, 255, 0), 2)
-                cv2.putText(frame, class_label, 
-                        (int(x1), int(y1) - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 
-                        0.7, (0, 255, 0), 2)
+
                 
 
                 cv2.circle(frame, 
@@ -67,6 +64,10 @@ while(True):
                 
                 isHorizontal = bool((abs(x1-x2) > abs(y1-y2) ))
                 length = abs(x1-x2) if not isHorizontal else abs(y1-y2)
+                cv2.putText(frame, class_label + " " + str(int(abs(x1-x2))) + ", " + str(int(abs(y1-y2))), 
+                        (int(x1), int(y1) - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 
+                        0.7, (0, 255, 0), 2)
                 data["Points"].append({ "brickType": str(class_label),"x": float(cx), "y": float(cy), "isHorizontal": bool(isHorizontal), "length": float(length)})
                 # send data to Unity
         connector.send("box_coordinates", data)
